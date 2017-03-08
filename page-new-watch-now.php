@@ -150,7 +150,7 @@ var isMobile = {
 								
 								$channel_list	=	array(
 													array("id"	=>	26, "title" =>	"Government etc" ),
-													array("id"	=>	27, "title" =>	"Bay Voice TV Regional Programming" ),
+													array("id"	=>	27, "title" =>	"Bay Voice TV Regional Programming", 'url'	=> 'http://reflect.channel27.creatv.cablecast.tv/live/live.m3u8' ),
 													array("id"	=>	28, "title" =>	"Youth, Education and Sports" ),
 													array("id"	=>	29, "title" =>	"Government etc" ),
 													array("id"	=>	30, "title" =>	"Arts, Issues and Lifestyles" ),
@@ -163,22 +163,34 @@ var isMobile = {
 									$ch_title	=	$ch["title"];
 									
 									$is_active	=	$pane_id	==	1 ? ' active ' : '';
+									
+									
 									ob_start();
 									print_now_and_next($ch_id);
 									$now_and_next = ob_get_contents();
 									ob_end_clean();
 									
+									$rtsp_url	=	"rtsp://ss1.midpenmedia.org:1935/live-chans/ch" . $ch_id . "_all";
+									$stream_url	=	'{ file: "http://ss1.midpenmedia.org:1935/live-chans/ngrp:ch' . $ch_id . '_all/jwplayer.smil" },
+									{ file: "http://ss1.midpenmedia.org:1935/live-chans/ngrp:ch' . $ch_id . '_all/playlist.m3u8" }' ;
+									
+									if (array_key_exists('url', $ch)) {
+										$now_and_next = '';
+										$rtsp_url	=	$ch["url"];
+										$stream_url	=	"{ file: '" . $ch["url"] . "' }" ;
+									}
+									
+									
 									$output_string	.=	'<li id="pane' . $pane_id . '" class="tab-pane ' . $is_active . '">
 										<div class="video-con" id="my-video' . $ch_id . '"></div>
 										<script type="text/javascript">
 										if( isMobile.Android() ) {
-											jQuery("#my-video' . $ch_id . '").html(\'<a href="rtsp://ss1.midpenmedia.org:1935/live-chans/ch' . $ch_id . '_all">' . $ch_title . '</a>\');
+											jQuery("#my-video' . $ch_id . '").html(\'<a href="' . $rtsp_url . '">' . $ch_title . '</a>\');
 										} else {
-											jwplayer("my-video26").setup({
+											jwplayer("my-video' . $ch_id . '").setup({
 												playlist: [{
 													sources : [
-														{ file: "http://ss1.midpenmedia.org:1935/live-chans/ngrp:ch' . $ch_id . '_all/jwplayer.smil" },
-														{ file: "http://ss1.midpenmedia.org:1935/live-chans/ngrp:ch' . $ch_id . '_all/playlist.m3u8" }
+														' . $stream_url . '
 													],
 													// title: "Channel ' . $ch_id . '",
 													image: "' .  get_template_directory_uri() . '/images/tv-img.png"
@@ -190,7 +202,8 @@ var isMobile = {
 										}
 										</script>
 										<p class="video-details">' . $now_and_next . '</p>
-									</li>';
+									</li>
+									';
 									$pane_id++;
 								endforeach;
 								
@@ -207,23 +220,23 @@ var isMobile = {
 									<br />Channel 26</a>
 									<div class="arrow"></div>
 								</li>
-								<li><a href="#pane6" ss-no="2" channel="27" id="channel-27" data-toggle="tab">Bay Voice TV Regional Programming
+								<li><a href="#pane2" ss-no="1" channel="27" id="channel-27" data-toggle="tab">Bay Voice TV Regional Programming
 									<br />Channel 27</a>
 									<div class="arrow"></div>
 								</li>
-								<li><a href="#pane2" ss-no="2" channel="28" id="channel-28" data-toggle="tab">Youth, Education and Sports
+								<li><a href="#pane3" ss-no="1" channel="28" id="channel-28" data-toggle="tab">Youth, Education and Sports
 									<br />Channel 28</a>
 									<div class="arrow"></div>
 								</li>
-								<li><a href="#pane3" ss-no="1" channel="29" id="channel-29" data-toggle="tab">Government etc
+								<li><a href="#pane4" ss-no="1" channel="29" id="channel-29" data-toggle="tab">Government etc
 									<br />Channel 29</a>
 									<div class="arrow"></div>
 								</li>
-								<li><a href="#pane4" ss-no="2" channel="30" id="channel-30" data-toggle="tab">Arts, Issues and Lifestyles
+								<li><a href="#pane5" ss-no="1" channel="30" id="channel-30" data-toggle="tab">Arts, Issues and Lifestyles
 									<br />Channel 30</a>
 									<div class="arrow"></div>
 								</li>
-								<li><a href="#pane5" ss-no="2" channel="75" id="channel-75" data-toggle="tab">Diversity and Culture
+								<li><a href="#pane6" ss-no="1" channel="75" id="channel-75" data-toggle="tab">Diversity and Culture
 									<br />Channel 75</a>
 									<div class="arrow"></div>
 								</li>
@@ -284,7 +297,7 @@ var isMobile = {
 							{ file: 'http://reflect.channel27.creatv.cablecast.tv/live/live.m3u8' }
 
 						],
-						title: "Channel ' + channel + '"
+						// title: "Channel ' + channel + '"
 						// image: '<?php echo get_template_directory_uri(); ?>/images/tv-img.png'
 					 }],
 					primary: "flash",
