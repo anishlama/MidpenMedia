@@ -149,18 +149,19 @@ var isMobile = {
 								$pane_id	=	1;
 								
 								$channel_list	=	array(
-													array("id"	=>	26, "title" =>	"Government etc" ),
-													array("id"	=>	27, "title" =>	"Bay Voice TV Regional Programming", 'url'	=> 'http://reflect.channel27.creatv.cablecast.tv/live/live.m3u8' ),
-													array("id"	=>	28, "title" =>	"Youth, Education and Sports" ),
-													array("id"	=>	29, "title" =>	"Government etc" ),
-													array("id"	=>	30, "title" =>	"Arts, Issues and Lifestyles" ),
-													array("id"	=>	75, "title" =>	"Diversity and Culture" ),
+													array("id"	=>	26, "server_id"	=>	1, "title" =>	"Government etc" ),
+													array("id"	=>	27, "server_id"	=>	2, "title" =>	"Bay Voice TV Regional Programming", 'url'	=> 'http://reflect.channel27.creatv.cablecast.tv/live/live.m3u8' ),
+													array("id"	=>	28, "server_id"	=>	2, "title" =>	"Youth, Education and Sports" ),
+													array("id"	=>	29, "server_id"	=>	1, "title" =>	"Government etc" ),
+													array("id"	=>	30, "server_id"	=>	2, "title" =>	"Arts, Issues and Lifestyles" ),
+													array("id"	=>	75, "server_id"	=>	2, "title" =>	"Diversity and Culture" ),
 												);
 								$output_string	=	'';
 								foreach($channel_list as $ch):
 								
 									$ch_id	=	$ch["id"];
 									$ch_title	=	$ch["title"];
+									$server_id	=	$ch["server_id"];
 									
 									$is_active	=	$pane_id	==	1 ? ' active ' : '';
 									
@@ -170,9 +171,9 @@ var isMobile = {
 									$now_and_next = ob_get_contents();
 									ob_end_clean();
 									
-									$rtsp_url	=	"rtsp://ss1.midpenmedia.org:1935/live-chans/ch" . $ch_id . "_all";
-									$stream_url	=	'{ file: "http://ss1.midpenmedia.org:1935/live-chans/ngrp:ch' . $ch_id . '_all/jwplayer.smil" },
-									{ file: "http://ss1.midpenmedia.org:1935/live-chans/ngrp:ch' . $ch_id . '_all/playlist.m3u8" }' ;
+									$rtsp_url	=	"rtsp://ss" . $server_id . ".midpenmedia.org:1935/live-chans/ch" . $ch_id . "_all";
+									$stream_url	=	'{ file: "http://ss '. $server_id . '.midpenmedia.org:1935/live-chans/ngrp:ch' . $ch_id . '_all/jwplayer.smil" },
+									{ file: "http://ss' . $server_id . '.midpenmedia.org:1935/live-chans/ngrp:ch' . $ch_id . '_all/playlist.m3u8" }' ;
 									
 									if (array_key_exists('url', $ch)) {
 										$now_and_next = '';
@@ -220,11 +221,11 @@ var isMobile = {
 									<br />Channel 26</a>
 									<div class="arrow"></div>
 								</li>
-								<li><a href="#pane2" ss-no="1" channel="27" id="channel-27" data-toggle="tab">Bay Voice TV Regional Programming
+								<li><a href="#pane2" ss-no="2" channel="27" id="channel-27" data-toggle="tab">Bay Voice TV Regional Programming
 									<br />Channel 27</a>
 									<div class="arrow"></div>
 								</li>
-								<li><a href="#pane3" ss-no="1" channel="28" id="channel-28" data-toggle="tab">Youth, Education and Sports
+								<li><a href="#pane3" ss-no="2" channel="28" id="channel-28" data-toggle="tab">Youth, Education and Sports
 									<br />Channel 28</a>
 									<div class="arrow"></div>
 								</li>
@@ -232,11 +233,11 @@ var isMobile = {
 									<br />Channel 29</a>
 									<div class="arrow"></div>
 								</li>
-								<li><a href="#pane5" ss-no="1" channel="30" id="channel-30" data-toggle="tab">Arts, Issues and Lifestyles
+								<li><a href="#pane5" ss-no="2" channel="30" id="channel-30" data-toggle="tab">Arts, Issues and Lifestyles
 									<br />Channel 30</a>
 									<div class="arrow"></div>
 								</li>
-								<li><a href="#pane6" ss-no="1" channel="75" id="channel-75" data-toggle="tab">Diversity and Culture
+								<li><a href="#pane6" ss-no="2" channel="75" id="channel-75" data-toggle="tab">Diversity and Culture
 									<br />Channel 75</a>
 									<div class="arrow"></div>
 								</li>
